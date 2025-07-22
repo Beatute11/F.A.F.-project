@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Projektelis</title>
-    <link rel="stylesheet" href="style-page.css">
-    <h1>Choose a friend!</h1>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style-page.css') }}">
 </head>
 
 <body>
+ <h1>Choose a friend!</h1>
     <div class="container">
         <div class="card">
             <a href="{{ url_for('chat', bot_name='flirty') }}">
             <div class="label">
                 <div class="back"></div>
-                <img src="cowboy.jpg">
+                <img src="{{ url_for('static', filename='cowboy.jpg') }}">
             </div>
             <h2>Flirty</h2>
-            </div>
+            </a>
+        </div>
 
         <div class="card">
             <div class="label">
