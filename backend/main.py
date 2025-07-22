@@ -7,16 +7,6 @@ app = Flask(__name__)
 def home():
     return render_template("page.html")
 
-@app.route("/chat", methods=["POST"])
-def chat():
-    data = request.get_json()
-    user_message = data.get("message")
-
-    if not user_message:
-        return jsonify({"error": "No message provided"}), 400
-
-    bot_reply = get_bot_response(user_message)
-    return jsonify({"response": bot_reply})
-
-if __name__ == "__main__":
-    app.run(debug=True)
+@app.route("/chat/<bot_name>")
+def chat(bot_name):
+    return render_template("chat.html", bot_name=bot_name)
