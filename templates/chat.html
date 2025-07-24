@@ -2,23 +2,63 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style-chat.css">
-    <h1>You're now chatting with {{ bot_name.title() }} 🤖</h1>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style-chat.css') }}">
 </head>
 <body>
-  <a href="{{ url_for('page.html') }}">← Back to Home</a>
+    <h1>You're now chatting with {{ bot_name.title() }}</h1>
+    <a href="{{ url_for('home') }}">Back to Home</a>
+    <div id="chat-box" style="max-height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;"></div>
 
-    <div class="message-header">
-        <img src="cowboy.jpg">
-    </div>
+    <input type="text" id="user-input" placeholder="Type a message..." onkeypress="handleEnter(event)">
+    <button onclick="sendMessage()">Send</button>
 
-    <div class="chat-box">
-        <div class="message-page">
-            <div class="message incoming">
-                <img src="bot.jpg">
-                <p>Boto tekstas</p>
-            </div>
 
-    </div>
+
+<!--    <div class="message-header">-->
+<!--        <img src="cowboy.jpg">-->
+<!--    </div>-->
+
+<!--    <div class="chat-box">-->
+<!--        <div class="message-page">-->
+<!--            <div class="message incoming">-->
+<!--                <img src="bot.jpg">-->
+<!--                <p>zmogaus tekstas</p>-->
+<!--            </div>-->
+
+<!--            <div class="message outgoing">-->
+<!--                <p>Boto tekstas</p>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div> !>-->
+
+    <script>
+        const botName = "{{ bot_name }}";  // aktyvus botas
+
+        function appendMessage(sender, message) {
+            const chatBox = document.getElementById("chat-box");
+            const newMsg = document.createElement("div");
+            newMsg.innerHTML = `<strong>${sender}:</strong> ${message}`;
+            chatBox.appendChild(newMsg);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById("user-input");
+            const message = input.value.trim();
+            if (!message) return;
+
+            appendMessage("You", message);
+            input.value = "";              // clear input
+
+            const response = await fetch(`/get_response/${botName}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message }) // send message to backend
+            });
+
+            const data = await response.json();
+            appendMessage(botName, data.response);  // boto zinutesss
+
+    </script>
 </body>
 </html>
