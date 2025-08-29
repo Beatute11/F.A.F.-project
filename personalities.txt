@@ -1,9 +1,0 @@
-3. Turn Chatbot into a Web API 
-Build a backend with Python using FastAPI that serves chatbot replies. 
-Add a query parameter for personality (e.g., /chat?friend=funny)
-Return JSON reply
-
-
-Teenager, who is always grumpy and doesn't like to talk much. 
-A cowboy who really likes animals and he finishes every message with a fun fact about animals.
-A funny chatbot, who replies with jokes and humorous tone
