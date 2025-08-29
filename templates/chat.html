@@ -1,64 +1,205 @@
+<!--
+===============================================================================
+
+    This HTML file renders an interactive chatbot interface.
+    - Displays a chosen bot (flirty, angry, funny) with dynamic name and avatar.
+    - Allows users to send messages via textarea + send button (or Enter key).
+    - Shows bot responses in real time with a "typing" animation.
+    - Provides chat history persistence and option to clear conversation.
+    - Includes a confirmation alert popup before deleting chat.
+    - Styled with external CSS (style-chat.css).
+    - Uses embedded JavaScript for rendering history, sending messages,
+      showing typing animation, and confirming deletions.
+
+===============================================================================
+-->
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
+    <title>{{ bot_name.title() }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style-chat.css') }}">
 </head>
+
 <body>
-    <h1>You're now chatting with {{ bot_name.title() }}</h1>
-    <a href="{{ url_for('home') }}">Back to Home</a>
-    <div id="chat-box" style="max-height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;"></div>
+<!-- Page header with bot name and avatar -->
+<h1>
+    {{ bot_name.title() }} <br> friend <br> <br>
+    <img src="{{ url_for('static', filename=bot_name ~ '.png') }}"
+    alt="{{ bot_name }} icon">
+</h1>
 
-    <input type="text" id="user-input" placeholder="Type a message..." onkeypress="handleEnter(event)">
-    <button onclick="sendMessage()">Send</button>
+<!-- Home/back button (navigates to main page) -->
+<div class="home-button">
+    <a href="{{ url_for('home') }}">
+        <img src = "{{ url_for('static', filename='home-btn.png') }}" alt="Back" width="50" height="50">
+    </a>
+</div>
 
+<!-- Chat container (holds messages + input field) -->
+<div class="chat-container">
+    <div id="chat-box" class="chat-box">
+        <!-- Chat messages are rendered here dynamically -->
+        <div class="messages" id="messages"></div>
+        <!-- User input area -->
+        <div class="user-input">
+            <textarea id="user-input" placeholder="Type a message..." onkeypress="handleEnter(event)"></textarea>
+            <div class="button-container">
+                <!-- Send button with icon -->
+                <button class="send-btn" onclick="sendMessage()">
+                    <img src = "{{ url_for('static', filename='send.png') }}" width="30" height="30">
+                </button>
+                <!-- Delete chat button -->
+                <button class="delete-btn" onclick="clearHistory()">Delete Chat</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Custom confirmation alert overlay for deleting chat -->
+<div id="alert" class="alert-overlay">
+    <div class="alert-box">
+        <p>Are you sure you want to delete all messages?</p>
+        <div class="alert-buttons">
+            <button id="alert-yes">Yes</button>
+            <button id="alert-no">No</button>
+        </div>
+    </div>
+</div>
 
-<!--    <div class="message-header">-->
-<!--        <img src="cowboy.jpg">-->
-<!--    </div>-->
+<script>
+    const botName = "{{ bot_name }}"; // Active bot name
+    const history = {{ history | tojson }}; // Chat history (loaded from server)
 
-<!--    <div class="chat-box">-->
-<!--        <div class="message-page">-->
-<!--            <div class="message incoming">-->
-<!--                <img src="bot.jpg">-->
-<!--                <p>zmogaus tekstas</p>-->
-<!--            </div>-->
+    /**
+     * Appends a new message (user or bot) to the chat window.
+     */
+    function appendMessage(sender, message) {
+        const messages = document.getElementById("messages");
+        const newMsg = document.createElement("div");
+        // Adjust sender name
+        let changeSender
+            if (sender === "user") {
+                changeSender = "you";
+        }   else if (sender === "model") {
+                changeSender = "{{ bot_name }}";
+        }   else {
+                changeSender = sender;
+        }
+            // Assign correct CSS class for sender
+            function getSenderClass(sender) {
+                return changeSender === "you" ? "user-message" : "bot-message";
+            }
+            const senderClass = getSenderClass(sender);
 
-<!--            <div class="message outgoing">-->
-<!--                <p>Boto tekstas</p>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div> !>-->
-
-    <script>
-        const botName = "{{ bot_name }}";  // aktyvus botas
-
-        function appendMessage(sender, message) {
-            const chatBox = document.getElementById("chat-box");
-            const newMsg = document.createElement("div");
-            newMsg.innerHTML = `<strong>${sender}:</strong> ${message}`;
-            chatBox.appendChild(newMsg);
-            chatBox.scrollTop = chatBox.scrollHeight;
+            // Build and append message
+            newMsg.classList.add("message", senderClass);
+            newMsg.innerHTML = `<strong>${changeSender}:</strong> ${message}`;
+            messages.appendChild(newMsg);
+            // Auto-scroll to bottom
+            messages.scrollTop = messages.scrollHeight;
         }
 
-        async function sendMessage() {
-            const input = document.getElementById("user-input");
-            const message = input.value.trim();
-            if (!message) return;
+    /**
+     * Renders previous chat history when page loads.
+     */
+    function renderHistory() {
+        history.forEach(msg => {
+            appendMessage(msg.role, msg.message);
+        });
+    }
 
-            appendMessage("You", message);
-            input.value = "";              // clear input
+    /**
+     * Clears all chat messages after confirmation alert.
+     */
+    async function clearHistory() {
+        const alert = document.getElementById("alert");
+        alert.style.display = "flex"; // Show confirmation popup
 
+        const yesBtn = document.getElementById("alert-yes");
+        const noBtn = document.getElementById("alert-no");
+        return new Promise((resolve) => {
+            yesBtn.onclick = async () => {
+                alert.style.display = "none"; // Hide alert
+                try {
+                    // Request backend to clear chat history
+                    await fetch(`/clear/${botName}`, {method: "POST"});
+                    document.getElementById("messages").innerHTML = ""; // Clear UI
+                } catch (error) {
+                    console.error("Failed to clear history:", error);
+                }
+                resolve(true);
+            };
+            noBtn.onclick = () => {
+                alert.style.display = "none"; // Cancel deletion
+                resolve(false);
+            };
+        });
+    }
+
+    /**
+     * Auto-resizes the textarea as user types.
+     */
+    function autoResize(textarea) {
+         textarea.style.height = "auto";              // Reset height
+         textarea.style.height = textarea.scrollHeight + "px"; // Grow with content
+        };
+
+    /**
+     * Sends a user message, shows typing animation, and fetches bot reply.
+     */
+    async function sendMessage() {
+        const input = document.getElementById("user-input");
+        const messages = document.getElementById("messages");
+        const message = input.value.trim();
+        if (!message) return;
+
+        // Append user message
+        appendMessage("you", message);
+        input.value = "";
+
+        // Create bot typing animation
+        const typingEl = document.createElement("div");
+        typingEl.className = "bot-typing";
+        for(let i = 0; i < 3; i++) {
+            const dot = document.createElement("span");
+            dot.className = "dot";
+            typingEl.appendChild(dot);
+        }
+        messages.appendChild(typingEl);
+        messages.scrollTop = messages.scrollHeight;
+
+        try {
+            // Send message to backend
             const response = await fetch(`/get_response/${botName}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message }) // send message to backend
+                body: JSON.stringify({ message })
             });
 
             const data = await response.json();
-            appendMessage(botName, data.response);  // boto zinutesss
+            typingEl.remove(); // Remove typing animation
+            appendMessage(botName, data.response); // Append bot reply
+        } catch (error) {
+            console.error("Error sending message:", error);
+            typingEl.remove(); // Clean up if error
+        }
+    }
 
-    </script>
+    /**
+     * Handles Enter key press (send message if Enter without Shift).
+     */
+    function handleEnter(event) {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+        }
+    }
+
+    // Load chat history on page load
+    window.onload = function() {
+        renderHistory();
+    }
+</script>
 </body>
 </html>

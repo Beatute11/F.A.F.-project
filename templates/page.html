@@ -1,5 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--
+===============================================================================
+   This HTML page serves as the main entry point where users can choose
+   one of three themed chat bots to interact with: Flirty, Angry, or Funny.
+
+   - Each bot is represented by a "card" with two sides:
+       • Front: Displays the bot’s name and icon.
+       • Back: Shows a short description of the bot’s personality.
+
+   - Clicking anywhere on a card navigates to the chat page for that bot.
+   - Uses Flask's Jinja2 `url_for` to dynamically load static assets
+     (CSS, images) and generate links to chat routes.
+
+   - The visual appearance and hover/flip animations are handled by
+     "style-page.css" located in the static folder.
+   - Includes a background overlay for aesthetic depth.
+
+===============================================================================
+-->
+
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Projektelis</title>
@@ -8,32 +28,80 @@
 
 <body>
  <h1>Choose a friend!</h1>
+
+ <!-- Container holding all bot selection cards -->
     <div class="container">
+        <!-- Card for Flirty Bot -->
         <div class="card">
-            <a href="{{ url_for('chat', bot_name='flirty') }}">
-            <div class="label">
-                <div class="back"></div>
-                <img src="{{ url_for('static', filename='cowboy.jpg') }}">
+            <!-- Front side of card: bot image + label -->
+            <div class="front">
+                <div class="flirty-img">
+                    <img src="{{ url_for('static', filename='flirty.png') }}">
+                </div>
+                <div class="label">
+                    <h2>FLIRTY</h2>
+                </div>
             </div>
-            <h2>Flirty</h2>
-            </a>
+            <!-- Back side of card: description -->
+            <div class="back">
+                <div class="description">
+                    <p>
+                        Flirty bot will flirt with you, but do not ask anything about flowers, because Flirty is clueless in that field.
+                        Expect playful compliments, cheeky remarks, and a smooth tone in every response.
+                        Just don’t expect any botanical wisdom — roses, daisies, or tulips are all mysteries to Flirty.
+                    </p>
+                </div>
+            </div>
+            <!-- Invisible link covering card leads to Flirty chat -->
+            <a class="card-link" href="{{ url_for('chat', bot_name='flirty') }}"></a>
         </div>
 
+        <!-- Card for Angry Bot -->
         <div class="card">
-            <div class="label">
-                <div class="back"></div>
-                <img src="teenager.webp">
+            <div class="front">
+                <div class="angry-img">
+                    <img src="{{ url_for('static', filename='angry.png') }}">
+                </div>
+                <div class="label">
+                    <h2>ANGRY</h2>
+                </div>
             </div>
-            <h2>Angry</h2>
+            <div class="back">
+                <div class="description">
+                    <p>
+                        Angry bot may sound furious most of the time, but don’t be fooled — it always starts off with a polite sentence.
+                        Every response that follows is filled with sarcasm, frustration, and exaggerated outrage, as if you've ruined its entire day.
+                        Ask a simple question, and you'll get a dramatic rant in return... with a smile at the start.
+                    </p>
+                </div>
+            </div>
+            <a class="card-link" href="{{ url_for('chat', bot_name='angry') }}"></a>
         </div>
 
+        <!-- Card for Funny Bot -->
         <div class="card">
-            <div class="label">
-                <div class="back"></div>
-                <img src="funny.jpg">
+            <div class="front">
+                <div class="funny-img">
+                    <img src="{{ url_for('static', filename='funny.png') }}">
+                </div>
+                <div class="label">
+                    <h2>FUNNY</h2>
+                </div>
             </div>
-            <h2>Funny</h2>
+            <div class="back">
+                <div class="description">
+                    <p>
+                        Funny bot finds everything hilarious and responds with lighthearted jokes, puns, and silly remarks.
+                        Every message begins and ends with a “haha”, no matter how serious your question might be.
+                        Whether you're talking about philosophy or breakfast cereal, Funny will find a way to make you laugh — or at least groan.
+                    </p>
+                </div>
+            </div>
+            <a class="card-link" href="{{ url_for('chat', bot_name='funny') }}"></a>
         </div>
+
+        <!-- Background overlay effect -->
+        <div class="overlay"></div>
     </div>
 </body>
 
