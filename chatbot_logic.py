@@ -1,24 +1,3 @@
-"""
-Chatbot Logic Module for Personality-Based AI Responses Using Google Gemini API.
-
-This module handles chatbot interactions using Google's Generative AI model (Gemini 2.5 Flash).
-It supports multiple chatbot personalities (e.g., flirty, angry, funny), manages chat history
-via JSON files, and limits stored history length.
-
-Functionality:
-- Loads and saves per-bot chat history from/to JSON files (list of {role, message} dicts).
-- Generates responses using Google Gemini API based on conversation context and bot personality.
-
-Globals:
-- history_dir (str): Directory where chat logs and histories are stored.
-- max_history_length (int): Maximum number of messages retained per chat history.
-
-Functions:
-- load_history(bot_name: str) -> list[dict]: Loads chat history for the given bot.
-- save_history(bot_name: str, history: list[dict]) -> None: Saves trimmed history to JSON.
-- get_bot_response(user_input: str, bot_name: str) -> str: Generates a personality-based response.
-"""
-
 import os
 import json
 from dotenv import load_dotenv

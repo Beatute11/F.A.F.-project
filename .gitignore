@@ -4,11 +4,11 @@ __pycache__/
 *.pyd
 *.db
 
-venv/
-.env/
-.venv/
+.idea/
 
-*.env
+venv/
+.venv/
+.env
 key.env
 
 chat_history/*.json

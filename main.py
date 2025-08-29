@@ -20,29 +20,47 @@ Modules:
 
 """
 
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, Response
 from chatbot_logic import get_bot_response, load_history
 
 app = Flask(__name__)
 chat_history = {}
 
 @app.route("/")
-def home():
-    """Render the main page with chatbot selection."""
+def home() -> str:
+    """
+    Render the main page with chatbot selection.
+
+    Returns:
+        str: Rendered HTML page for chatbot selection.
+    """
+
     return render_template("page.html")
 
 @app.route("/chat/<bot_name>")
-def chat(bot_name):
-    """Render the chat interface for a specific chatbot, including history."""
+def chat(bot_name: str) -> str:
+    """
+    Render the chat interface for a specific chatbot, including its history.
+
+    Args:
+        bot_name (str): The name of the selected chatbot personality.
+
+    Returns:
+        str: Rendered HTML page for chat interface with history passed in.
+    """
     history = load_history(bot_name)
     return render_template("chat.html", bot_name=bot_name, history=history)
 
 @app.route("/get_response/<bot_name>", methods=["POST"])
-def get_response(bot_name):
+def get_response(bot_name: str) -> Response:
     """
-    Handle incoming chat message from user.
-    Expects JSON with key 'message'. Generates a response using the chatbot logic,
-    appends the message pair to in-memory history, and returns the response.
+    Handle an incoming chat message from the user.
+
+    Args:
+        bot_name (str): The name of the selected chatbot personality.
+
+    Returns:
+        Response: JSON response with the chatbot's reply, e.g. {"response": "<bot reply>"}
     """
     user_input = request.json.get("message")
     bot_reply = get_bot_response(user_input, bot_name)
@@ -54,7 +72,16 @@ def get_response(bot_name):
     return jsonify({"response": bot_reply})
 
 @app.route('/clear/<bot_name>', methods=['POST'])
-def clear(bot_name):
+def clear(bot_name: str ) -> None:
+    """
+       Clear chat history for a specific chatbot, both in-memory and in JSON file.
+
+       Args:
+           bot_name (str): The name of the chatbot whose history will be cleared.
+
+       Returns:
+           None
+    """
     json_path = f"chat_history/{bot_name}.json"
 
     try:
