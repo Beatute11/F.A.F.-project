@@ -14,7 +14,7 @@ model = genai.GenerativeModel("gemini-2.5-flash")
 history_dir = "chat_history"
 max_history_length = 200
 
-def load_history(bot_name: str):
+def load_history(bot_name: str) -> list[dict[str, str]]:
     """
     Load chat history for a given bot from its JSON file.
 
@@ -33,7 +33,7 @@ def load_history(bot_name: str):
             return json.load(f)
     return []
 
-def save_history(bot_name: str, history) -> None:
+def save_history(bot_name: str, history: list[dict[str, str]]) -> None:
     """
     Save chat history to a JSON file, trimming it to the maximum allowed length.
 
@@ -49,8 +49,7 @@ def save_history(bot_name: str, history) -> None:
     with open(path, "w", encoding="utf-8") as f:
         json.dump(trimmed_history, f, indent=2)
 
-# TODO surasyti typing funkcijom
-def get_bot_response(user_input, bot_name) -> str:
+def get_bot_response(user_input: str, bot_name: str) -> str:
     """
     Generate a chatbot response using Google Gemini based on prior history and personality.
 
