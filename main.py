@@ -1,25 +1,3 @@
-"""
-Flask Web Application for a Multi-Personality Chatbot Interface.
-
-This backend serves a frontend interface that allows users to interact with one of several
-AI chatbot "personalities" (e.g., flirty, angry, funny). It handles the following tasks:
-
-- Renders a homepage where users select a chatbot.
-- Displays the chat interface with conversation history.
-- Processes user input and returns chatbot-generated responses via the Gemini API.
-- Maintains in-memory chat history per bot and loads long-term history from disk.
-
-Routes:
-- "/" : Home page with chatbot selection cards.
-- "/chat/<bot_name>" : Chat interface for the selected bot, loading saved conversation history.
-- "/get_response/<bot_name>" (POST) : Accepts user message via JSON, generates response, updates history, returns response.
-
-Modules:
-- get_bot_response(user_input, bot_name): Generates AI response using Google Gemini API.
-- load_history(bot_name): Loads saved chat history from JSON file.
-
-"""
-
 from flask import Flask, request, jsonify, render_template, Response
 from chatbot_logic import get_bot_response, load_history
 
