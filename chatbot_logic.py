@@ -3,7 +3,7 @@ import json
 from dotenv import load_dotenv
 import google.generativeai as genai
 
-load_dotenv("/home/beata/Projektas/key.env")
+load_dotenv("key.env")
 
 GEMINI_API = os.environ.get("GOOGLE_API_KEY")
 
