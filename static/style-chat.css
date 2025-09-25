@@ -303,7 +303,7 @@ h1 img{
 /*################################*/
 /* Styles for Mobile */
 /*################################*/
-@media screen and (max-width: 760px) {
+@media screen and (max-width: 640px) {
     .home-button img {
         height: 30px;
         width: 30px;

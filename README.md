@@ -25,6 +25,7 @@ The goal of this project was to:
 - Conversation history saved in JSON per bot
 - Clear chat history button
 - Simple and responsive UI
+- Responsive design for smaller screens (max-width 1200px), for mobiles (max-width 640px)
 
 ## Tech Stack
 - **Backend**: Python, Flask
