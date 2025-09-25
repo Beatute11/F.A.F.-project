@@ -24,7 +24,7 @@
 <body>
 <!-- Page header with bot name and avatar -->
 <h1>
-    {{ bot_name.title() }} <br> friend <br> <br>
+    {{ bot_name.title() }} friend
     <img src="{{ url_for('static', filename=bot_name ~ '.png') }}"
     alt="{{ bot_name }} icon">
 </h1>
@@ -32,7 +32,7 @@
 <!-- Home/back button (navigates to main page) -->
 <div class="home-button">
     <a href="{{ url_for('home') }}">
-        <img src = "{{ url_for('static', filename='home-btn.png') }}" alt="Back" width="50" height="50">
+        <img src = "{{ url_for('static', filename='home-btn.png') }}" alt="Back">
     </a>
 </div>
 
@@ -47,7 +47,7 @@
             <div class="button-container">
                 <!-- Send button with icon -->
                 <button class="send-btn" onclick="sendMessage()">
-                    <img src = "{{ url_for('static', filename='send.png') }}" width="30" height="30">
+                    <img src = "{{ url_for('static', filename='send.png') }}" alt="Send">
                 </button>
                 <!-- Delete chat button -->
                 <button class="delete-btn" onclick="clearHistory()">Delete Chat</button>

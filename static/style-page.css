@@ -1,14 +1,14 @@
-/* Reset default margins and paddings */
+/* Reset default margins */
 *{
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
 }
 
 body{
-    height: 100vh;
+    min-height: 100vh;
+    width: 100vw;
     display: flex; /* Flexbox for layout */
+    padding: 30px;
     background: linear-gradient(135deg, #4B0082 20%, #FFFACD 80%);
-    padding: 50px;
     box-sizing: border-box;
 }
 
@@ -16,7 +16,7 @@ body{
 .container{
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     position: relative;
     transition: filter 0.3s ease;
 }
@@ -148,4 +148,102 @@ p{
     height: 100%;
     text-decoration: none;
     z-index: 30;
+}
+
+/*################################*/
+/* Styles for smaller screens */
+/*################################*/
+@media screen and (max-width: 1200px) {
+    body{
+        height: 100%;
+        flex-direction: column;
+    }
+
+    .container{
+        flex-wrap: wrap;
+    }
+
+    .flirty-img img{
+        height: 200px;
+        width: 140px;
+    }
+    .angry-img img{
+        height: 200px;
+        width: 140px;
+    }
+    .funny-img img{
+        height: 200px;
+        width: 160px;
+        padding-left: 20px;
+    }
+
+    .card{
+        height: 300px;
+        width: 250px;
+        margin: 30px;
+    }
+
+    .card:hover{
+        scale: 1.2;
+    }
+
+    .label{
+        width: 130px;
+    }
+
+    h1{
+        text-align: center;
+        font-size: 60px;
+    }
+
+    h2{
+        font-size: 30px;
+        margin: 20px 50px;
+    }
+
+    p{
+        color: white;
+        font-size: 14px;
+    }
+
+
+
+}
+
+/*################################*/
+/* Styles for Mobile */
+/*################################*/
+@media screen and (max-width: 760px) {
+    .funny-img img{
+        padding-left: 5px;
+    }
+
+    .card{
+        height: 300px;
+        width: 500px;
+        margin: 30px;
+        text-align: left;
+    }
+
+    .back {
+        transform: none;
+        backface-visibility: visible;
+        background: transparent;
+        padding-left: 200px;
+    }
+
+    .card:hover {
+        transform: none;
+        scale: 1;
+    }
+
+    h2{
+        margin: 10px;
+    }
+
+    p{
+        color: black;
+    }
+
+
 }

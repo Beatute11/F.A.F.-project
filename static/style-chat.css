@@ -1,5 +1,5 @@
 body{
-    height: 100vh; /* Full height of the viewport */
+    min-height: 100vh; /* Full height of the viewport */
     margin: 0;
     display: flex;
     justify-content: center;
@@ -11,6 +11,10 @@ body{
 .home-button {
     position: absolute;  bottom: 5px; left: 10px;
     z-index: 10;
+}
+.home-button img {
+    height: 50px;
+    width: 50px;
 }
 .home-button:hover {
     scale: 1.5; /* Enlarge on hover */
@@ -31,7 +35,7 @@ body{
     display: flex;
     flex-direction: column; /* Stack messages and input */
     position: relative;
-    z-index: 1;
+    z-index: 10;
     width: 60%;
     height: 80vh;
     margin: auto;
@@ -88,6 +92,10 @@ body{
     border-radius: 5px;
     cursor: pointer;
     background-color: #CCCCCC;
+}
+.send-btn img {
+    width: 30px;
+    height: 30px;
 }
 .send-btn:hover {
     background-color: #636363;
@@ -165,6 +173,7 @@ body{
 .dot:nth-child(3) { animation-delay: 0.4s; }
 
 h1{
+    width: 200px;
     position: absolute;
     top: 50px;
     left: 50px;
@@ -184,6 +193,7 @@ h1{
 h1 img{
     width: 200px;
     height: 300px;
+    padding-top: 50px;
     vertical-align: middle;
     animation-name: floating;
     animation-duration: 2s;
@@ -237,4 +247,66 @@ h1 img{
     padding: 8px 16px;
     border-radius: 8px;
     cursor: pointer;
+}
+
+/*################################*/
+/* Styles for smaller screens */
+/*################################*/
+@media screen and (max-width: 1200px) {
+    .user-input {
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .user-input textarea {
+        min-height: 20px;
+        padding: 5px;
+        font-size: 14px;
+    }
+
+    .button-container {
+        display: flex;
+        flex-direction: column; /* Stack send + delete buttons vertically */
+        gap: 10px;
+
+    }
+    .send-btn {
+        height: 20px;
+    }
+
+    .send-btn img {
+        height: 20px;
+        width: 20px;
+    }
+
+    h1 {
+        width: 100%;
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        align-items: center;
+        font-size: 40px;
+    }
+    h1 img{
+        width: 80px;
+        height: 120px;
+        padding-top: 30px;
+        padding-left: 20px;
+        animation-iteration-count: 2;
+        z-index: 1;
+    }
+
+}
+
+/*################################*/
+/* Styles for Mobile */
+/*################################*/
+@media screen and (max-width: 760px) {
+    .home-button img {
+        height: 30px;
+        width: 30px;
+    }
+
 }
